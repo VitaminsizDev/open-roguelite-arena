@@ -1,1 +1,0 @@
-// TODO: Arc hitbox logic

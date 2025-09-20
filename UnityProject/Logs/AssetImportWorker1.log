@@ -250,3 +250,7 @@ Received Import Request.
 Start importing Assets/Scripts/Core/EventBus.cs using Guid(4af2b8e0e18df40278ce9d06b3801981) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '78e27edf69adca404febb6f6ef163bea') in 0.00028275 seconds
 Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
 
+Editor requested this worker to shutdown with reason: Scaling down because of idle timeout
+AssetImportWorkerClient::OnTransportError - code=2 error=End of file
+AssetImportWorker is now disconnected from the server
+Process exiting
