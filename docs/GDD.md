@@ -6,7 +6,7 @@
 **Pillars:** easy onboarding; addictive grind; risk & reward.
 
 ## Movement
-- WASD (KBM) / Left Stick (pad). Sprint toggle.
+- WASD (KBM) / Left Stick (pad). Hold to sprint.
 - Metin2‑inspired run; no dash/teleport.
 - Facing follows movement.
 
