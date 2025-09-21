@@ -1,0 +1,1 @@
+Temporary stand-in: replace with final player mesh (FBX/GLB). Use a simple capsule mesh if nothing else is available.

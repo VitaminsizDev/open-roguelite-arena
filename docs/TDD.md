@@ -1,7 +1,7 @@
 # Technical Design Document — Core Systems
 
 ## Goals
-Layered FSM (Movement || Combat), data‑driven configs, clean input→intent→state flow, multiplayer‑friendly later.
+Camera-relative strafing controller with predictable animation sync, data-driven tuning, future‑proof hooks for combat and buffs.
 
 ## Structure
 ```
@@ -13,27 +13,25 @@ Assets/Code/
     Combat/            (Hitbox, Hurtbox, Damage, Block)
   Gameplay/
     Player/
-      FSM/
-        Movement/      (Idle, Run, Sprint)
-        Combat/        (Idle, LightSwing1H, HeavySwing2H)
-      PlayerBrain.cs
+      PlayerBrain.cs       (camera-relative movement)
+      PlayerAnimatorDriver.cs
   Data/                (ScriptableObjects)
   Tests/
 ```
 
 ## Data (SOs)
-- `PlayerConfig`: speeds, accel/decel, baseDefense.
+- `PlayerConfig`: walkSpeed, sprintMultiplier, rotationSharpness, gravity, groundedGravity, baseDefense.
 - `AttackConfig`: weaponClass(1H/2H), damage, windup, active, recovery, coneDeg, reach.
 - `CameraConfig`: offsets, pitch range, zoom, smoothing, collisionRadius.
 
 ## Input
 Actions: Move, Sprint, Attack, Orbit, Zoom. `PlayerInputDriver` produces intents.
 
-## FSMs
-Interfaces: `IState`, `StateMachine`.  
-Movement: Idle(0), Run(1), Sprint(2).  
-Combat: Idle(0), Swings(2).  
-Equal priority → allow Combat to proceed while Movement continues.
+## Movement
+- `PlayerBrain` reads `PlayerInputDriver`, projects move axes onto camera forward/right, and feeds a `CharacterController` with constant-speed strafing (no acceleration curves).
+- Base speed comes from `PlayerConfig.walkSpeed`; sprint/buff multipliers adjust target speed directly.
+- `NormalizedSpeed` = `currentSpeed / baseSpeed` (>=0), driving animation speed so clips stay in sync as buffs scale.
+- Optional gravity keeps the controller grounded; no jump/dash logic baked in.
 
 ## Hitboxes
 Arc sector during `active`: test angle and distance vs Hurtboxes. One hit per target per swing.
@@ -42,7 +40,7 @@ Arc sector during `active`: test angle and distance vs Hurtboxes. One hit per ta
 Follow with smoothing; orbit clamped; spherecast collision and pull‑in to avoid occlusion.
 
 ## Tests
-- Guards and transitions.  
+- Movement vector math (camera projection, normalized speed ratio).  
 - Hitbox arc math edge cases.  
 - Camera occlusion ≤2 frames.  
 - p99 frame ≤20 ms in test scene.
